@@ -25,6 +25,14 @@ pip install -r requirements.txt
 pytest -v
 ```
 
+## Rodando com Docker
+
+```bash
+docker build -t cambio-semanal .
+docker run --rm cambio-semanal report
+docker run --rm cambio-semanal fetch
+```
+
 ## Estrutura
 
 ```
@@ -39,6 +47,7 @@ tests/
 .github/workflows/ci.yml    # CI: roda os testes a cada push/PR
 .github/workflows/cd.yml     # CD: builda o pacote e publica como artefato do workflow
 pyproject.toml                # metadados de build do pacote (usado pelo workflow de CD)
+Dockerfile                    # imagem Docker para rodar a aplicacao em container
 ```
 
 ## CI/CD
