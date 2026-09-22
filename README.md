@@ -46,6 +46,7 @@ tests/
   test_analysis.py             # testes unitarios
 .github/workflows/ci.yml    # CI: roda os testes a cada push/PR
 .github/workflows/cd.yml     # CD: builda o pacote e publica como artefato do workflow
+.github/workflows/notify.yml  # Alerta: envia notificacao no Discord a cada push no main
 pyproject.toml                # metadados de build do pacote (usado pelo workflow de CD)
 Dockerfile                    # imagem Docker para rodar a aplicacao em container
 ```
@@ -54,3 +55,4 @@ Dockerfile                    # imagem Docker para rodar a aplicacao em containe
 
 - **CI** (`.github/workflows/ci.yml`): instala as dependencias e roda `pytest` a cada push e a cada pull request para `main`.
 - **CD** (`.github/workflows/cd.yml`): builda um pacote distribuivel do projeto (`python -m build`) e publica o resultado como artefato do workflow a cada push/PR para `main`. Como este e um script CLI (sem servidor para implantar), o "deployment" aqui e a entrega continua de um pacote pronto para uso, em vez de um deploy para producao.
+- **Alertas** (`.github/workflows/notify.yml`): envia uma mensagem para um canal do Discord a cada push no `main` (o que inclui todo merge de Pull Request), via um webhook guardado no secret `DISCORD_WEBHOOK`. Tambem pode ser disparado manualmente pela aba Actions (`workflow_dispatch`).
