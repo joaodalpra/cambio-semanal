@@ -1,0 +1,29 @@
+name: Discord Notify
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord alert
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          REPO: ${{ github.repository }}
+          AUTHOR: ${{ github.actor }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          COMMIT_URL: ${{ github.event.head_commit.url }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          MESSAGE="**Novo push no main** em \`$REPO\`
+          **Autor:** $AUTHOR
+          **Commit:** ${COMMIT_MSG:-Execucao manual (workflow_dispatch)}
+          **SHA:** \`${COMMIT_SHA:0:7}\`
+          **Link:** ${COMMIT_URL:-https://github.com/$REPO}"
+
+          PAYLOAD=$(jq -n --arg content "$MESSAGE" '{content: $content}')
+
+          curl -sf -H "Content-Type: application/json" -d "$PAYLOAD" "$DISCORD_WEBHOOK"
